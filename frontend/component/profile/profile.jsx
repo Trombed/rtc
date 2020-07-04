@@ -1,4 +1,6 @@
+
 import React from 'react'
+import App from '../app';
 
 
 
@@ -77,24 +79,11 @@ class Profile extends React.Component {
         }
     }
 
-    // streamToggle() {
-        
-    //     console.log(this.props)
-    //     if (this.state.video && !this.state.streamLive) {
-    //         return (
-    //             <button onClick={() => this.props.streamOn()} >
-    //                 Go LIVE
-    //             </button>
-    //         )
-    //     } else (this.state.video && this.state.streamLive)
-    //     {
-    //         return (
-    //             <button> 
-    //                 STREAM OFF
-    //             </button>
-    //         )
-    //     }
-    // }
+    beginStream() {
+        App.cable.subscriptions.create({
+            chanel: `StreamChannel:  ${this.props.streams.id}`
+        })
+    }
 
     render() {
 

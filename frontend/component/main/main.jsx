@@ -1,6 +1,6 @@
 
-import React from 'react'
-
+import React from 'react';
+import { Link } from 'react-router-dom'
 
 
 class Main extends React.Component {
@@ -18,7 +18,15 @@ class Main extends React.Component {
          
             return (
                 <div key={index}>
-                    {channel.userName} is LIVE:  {channel.streamId}: 
+                   <Link to={{
+                       pathname: `${channel.userName}`,
+                       state: {
+                           streamId: `${channel.streamId}`
+                        }
+                   }}> 
+                   {/* <Link to={`${channel.streamId}`}> */}
+                       {channel.userName} is LIVE:  {channel.streamId}
+                    </Link>
                 </div>
             )
         })
