@@ -38,7 +38,6 @@ export const signup = (user) => (dispatch) => (
 
 export const logout = () => (dispatch) => (
   APIUtil.logout()
-    .then( () => console.log("logout"))
     .then(() => dispatch(logoutCurrentUser()))
 )
 

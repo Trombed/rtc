@@ -6,10 +6,17 @@ class Profile extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            video: false
+            video: false,
+            streamLive: false
         };
         
-        
+        this.channelInfo = {
+            user_id: this.props.curUserId
+        }
+    }
+
+    componentWillUnmount() {
+       if(this.state.streamLive) this.props.streamOff(this.channelInfo)
     }
 
     getUserMedia() {
@@ -58,7 +65,7 @@ class Profile extends React.Component {
         this.setState({ video: false})
     }
 
-    streamToggle() {
+    cameraToggle() {
         if (!this.state.video) {
             return (
                 <button onClick={() => this.getUserMedia()}>Open Camera</button>
@@ -70,14 +77,36 @@ class Profile extends React.Component {
         }
     }
 
+    // streamToggle() {
+        
+    //     console.log(this.props)
+    //     if (this.state.video && !this.state.streamLive) {
+    //         return (
+    //             <button onClick={() => this.props.streamOn()} >
+    //                 Go LIVE
+    //             </button>
+    //         )
+    //     } else (this.state.video && this.state.streamLive)
+    //     {
+    //         return (
+    //             <button> 
+    //                 STREAM OFF
+    //             </button>
+    //         )
+    //     }
+    // }
+
     render() {
 
         return(
             <div>
+                {this.props.curUserName}'s Profile
                 <video className="video-player" id="video-player" autoPlay controls></video>
-                {this.streamToggle()}
-
-                <button> Go Live </button>
+                {this.cameraToggle()}
+                <button onClick={() => this.props.streamOn(this.channelInfo)}>
+                    GO LIVE
+                </button>
+                <button onClick={() => this.props.streamOff(this.channelInfo)}>GO OFFLINE</button>
             </div>
 
             

@@ -3,18 +3,19 @@ import {AuthRoute, ProtectedRoute} from '../util/route_util'
 import {Switch} from 'react-router-dom'
 import NavBar from './navbar/navbar_container'
 import Modal from './modals/modal'
-import Main from './main/main'
-import Profile from './profile/profile';
+import MainContainer from './main/main_container'
+import ProfileContainer from './profile/profile_container';
 
 const App = () => (
     <div className="App">
         <Modal />
         <NavBar />
         <Switch>
-            <ProtectedRoute exact path="/profile" component={Profile} />
-            <Main />
+            <ProtectedRoute exact path="/profile" component={ProfileContainer} />
+           
         
         </Switch>
+        <MainContainer />
         
     </div>
 )
