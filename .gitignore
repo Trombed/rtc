@@ -6,3 +6,4 @@ config/master.key
 /tmp
 /storage
 /log
+/public/assets
