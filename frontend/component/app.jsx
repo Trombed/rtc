@@ -5,7 +5,7 @@ import NavBar from './navbar/navbar_container'
 import Modal from './modals/modal'
 import MainContainer from './main/main_container'
 import ProfileContainer from './profile/profile_container';
-import Channel from './channel/channel'
+import ChannelContainer from './channel/channel_container'
 
 const App = () => (
     <div className="App">
@@ -13,7 +13,7 @@ const App = () => (
         <NavBar />
         <Switch>
             <ProtectedRoute exact path="/profile" component={ProfileContainer} />
-            <Route path="/:id" component={Channel} />
+            <Route path="/:id" component={ChannelContainer} />
         
         </Switch>
 

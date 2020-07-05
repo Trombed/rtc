@@ -6,6 +6,7 @@ import ui from './ui_reducer';
 import errors from './errors_reducer';
 import streamReducers from './streams_reducer'
 import channelReducers from './channels_reducer'
+import watchReducers from "./watch_reducer";
 
 const appReducer = combineReducers({
     session: sessionReducer,
@@ -13,6 +14,7 @@ const appReducer = combineReducers({
     streams: streamReducers,
     errors,
     channels: channelReducers,
+    watch: watchReducers,
     ui
 })
 
