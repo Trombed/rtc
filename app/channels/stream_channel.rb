@@ -1,9 +1,7 @@
 class StreamChannel < ApplicationCable::Channel
-   def subscribed
-        stream_from "stream_channel_#{params[:stream_channel]}"
-
-        puts "stream from  #{params[:stream_channel]}"
-
+    def subscribed
+        puts "#{params[:stream_id]}"
+        stream_from "stream_channel#{params[:stream_id]}"
     end
 
     def unsubscribed
