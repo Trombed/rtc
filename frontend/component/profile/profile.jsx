@@ -91,7 +91,7 @@ class VideoCall extends React.Component{
         const remoteVid = document.createElement("video");
         remoteVid.id = `remoteVideoContainer+${userId}`;
         remoteVid.autoplay = "autoplay";
-        remoteVid.srcO  bject = e.streams[0];
+        remoteVid.srcObject = e.streams[0];
     
         this.remoteVideoContainer.appendChild(remoteVid);
     };
