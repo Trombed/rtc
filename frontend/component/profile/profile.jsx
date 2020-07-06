@@ -125,10 +125,12 @@ class VideoCall extends React.Component{
           this.pcPeers[pcKeys[i]].close();
       }
       this.pcPeers = {};
-      this.localStream.srcObject.getTracks().forEach((track) => {
+      let video = document.getElementById("local-video")
+    
+      video.srcObject.getTracks().forEach((track) => {
           track.stop();
       })
-      this.localStream.srcObject = null;
+      video.srcObject = null;
       App.cable.subscriptions.subscriptions = [];
       this.remoteVideoContainer.innerHTML = "";
         broadcastData({
