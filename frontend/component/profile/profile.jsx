@@ -11,19 +11,22 @@ class VideoCall extends React.Component{
   }
   componentDidMount(){
     this.remoteVideoContainer = document.getElementById("remote-video-container")
-    if (navigator.mediaDevices === undefined) { navigator.mediaDevices = {}; }
+    if (navigator.mediaDevices === undefined) { 
+        navigator.mediaDevices = {}; 
+    }
+
     if (navigator.mediaDevices.getUserMedia === undefined) {
-        navigator.mediaDevices.getUserMedia = function(constraints) {
-            var getUserMedia = navigator.webkitGetUserMedia ||               navigator.mozGetUserMedia;
+        navigator.mediaDevices.getUserMedia = (constraints) => {
+            var getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
                 
                     if (!getUserMedia) {
                     return Promise.reject(new Error('getUserMedia is not implemented in this browser'));
                     }
-                    return new Promise(function(resolve, reject) {
+                    return new Promise((resolve, reject) => {
                     getUserMedia.call(navigator, constraints, resolve, reject);
                     });
+            }
         }
-    }
     
     navigator.mediaDevices.getUserMedia( { audio: false, video: true })
     .then(stream => {
@@ -31,6 +34,8 @@ class VideoCall extends React.Component{
         document.getElementById("local-video").srcObject = stream;
     }).catch(error => { console.log(error) });
   }
+
+
   joinCall(e){
     
     App.cable.subscriptions.create(
@@ -159,7 +164,6 @@ class VideoCall extends React.Component{
                     pc.createAnswer().then(answer => {
                         pc.setLocalDescription(answer)
                             .then(() => {
-
                                     broadcastData({
                                         type: EXCHANGE,
                                         from: this.userId,
@@ -177,7 +181,6 @@ class VideoCall extends React.Component{
     render(){
         return(<div className="VideoCall">
                     <div id="remote-video-container"></div>
-                    <video id="remote-video" controls autoPlay></video>
                     <video id="local-video" controls autoPlay></video>
                     <button onClick={this.joinCall.bind(this)}>Join Call</button>
                     <button onClick={this.leaveCall.bind(this)}>Leave Call</button>
