@@ -6,10 +6,19 @@ class VideoCall extends React.Component{
   constructor(props){
     super(props);
     this.pcPeers = {};
-    this.userId = Math.floor(Math.random() * 10000);
-
+    this.userId = this.props.curUserId;
+    this.channelInfo = { user_id: this.props.curUserId }
+    this.state = { streamLive: true}
   }
   componentDidMount(){
+
+  }
+
+  componentWillUnmount() {
+    if(this.state.streamLive) this.props.streamOff(this.channelInfo)
+  }
+
+  getCamera() {
     this.remoteVideoContainer = document.getElementById("remote-video-container")
     if (navigator.mediaDevices === undefined) { 
         navigator.mediaDevices = {}; 
@@ -37,13 +46,15 @@ class VideoCall extends React.Component{
 
 
   joinCall(e){
-    
+    this.getCamera();
     App.cable.subscriptions.create(
-        { channel: "StreamChannel" },
+        { channel: "StreamChannel",
+            id: this.props.curUserId
+     },
     { connected: () => {
         console.log('CONNECTED');
 
-        broadcastData({ type: JOIN_CALL, from: this.userId });
+        broadcastData({ type: JOIN_CALL, from: this.userId, stream_Id: this.props.curUserId });
     },
         received: data => {
 
@@ -182,8 +193,16 @@ class VideoCall extends React.Component{
         return(<div className="VideoCall">
                     <div id="remote-video-container"></div>
                     <video id="local-video" controls autoPlay></video>
-                    <button onClick={this.joinCall.bind(this)}>Join Call</button>
-                    <button onClick={this.leaveCall.bind(this)}>Leave Call</button>
+                    <button onClick={ () => {
+                            this.joinCall()
+                            this.props.streamOn(this.channelInfo)
+                    }}>
+                            LIVE</button>
+                    
+                    <button onClick={ () => {
+                        this.leaveCall.bind(this)
+                        this.props.streamOff(this.channelInfo)
+                        }}>Offline</button>
                 </div>)
     }
 }

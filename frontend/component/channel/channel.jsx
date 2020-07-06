@@ -10,21 +10,18 @@ class VideoCall extends React.Component{
 
   }
   componentDidMount(){
-    this.remoteVideoContainer = document.getElementById("remote-video-container")
-    navigator.mediaDevices.getUserMedia( { audio: false, video: true })
-    .then(stream => {
-        this.localStream = stream;
-        document.getElementById("local-video").srcObject = stream;
-    }).catch(error => { console.log(error) });
+    this.props.getStreamId(this.props.match.params.id) 
   }
   joinCall(e){
-    
+    console.log(this.props.channel)
     App.cable.subscriptions.create(
-        { channel: "StreamChannel" },
+        { channel: "StreamChannel",
+            id: this.props.channel
+     },
     { connected: () => {
         console.log('CONNECTED');
 
-        broadcastData({ type: JOIN_CALL, from: this.userId });
+        broadcastData({ type: JOIN_CALL, from: this.userId, stream_Id: this.props.curUserId });
     },
         received: data => {
 
@@ -62,7 +59,6 @@ class VideoCall extends React.Component{
     const pc = new RTCPeerConnection(ice);
 
     this.pcPeers[userId] = pc;
-    this.localStream.getTracks().forEach(track => pc.addTrack(track, this.localStream));
     if (offerBool) {
         pc.createOffer().then(offer => {
             pc.setLocalDescription(offer).then(() => {
@@ -87,11 +83,12 @@ class VideoCall extends React.Component{
         })
     };
     pc.ontrack = (e) => {
-        const remoteVid = document.createElement("video");
-        remoteVid.id = `remoteVideoContainer+${userId}`;
+        let remoteVid = document.getElementById('remote-video')
+       debugger
+
         remoteVid.autoplay = "autoplay";
         remoteVid.srcObject = e.streams[0];
-        this.remoteVideoContainer.appendChild(remoteVid);
+
     };
     pc.oniceconnectionstatechange = (e) => {
         if (pc.iceConnectionState === 'disconnected') {
@@ -141,7 +138,6 @@ class VideoCall extends React.Component{
                     pc.createAnswer().then(answer => {
                         pc.setLocalDescription(answer)
                             .then(() => {
-
                                     broadcastData({
                                         type: EXCHANGE,
                                         from: this.userId,
@@ -158,8 +154,9 @@ class VideoCall extends React.Component{
   }
     render(){
         return(<div className="VideoCall">
-                    <div id="remote-video-container"></div>
-                    <video id="local-video" autoPlay></video>
+                    <div id="remote-video-container">
+                        <video id="remote-video" autoPlay controls></video>
+                    </div>
                     <button onClick={this.joinCall.bind(this)}>Join Call</button>
                     <button onClick={this.leaveCall.bind(this)}>Leave Call</button>
                 </div>)
@@ -168,174 +165,176 @@ class VideoCall extends React.Component{
 export default VideoCall;
 
 
-// import React from 'react'
-// import {broadcastData, JOIN_CALL, LEAVE_CALL, EXCHANGE, ice} from '../../util/video_util'
 
+// import React from 'react';
+// import { broadcastData, JOIN_CALL, LEAVE_CALL, EXCHANGE, ice } from '../../util/video_util.js';
 
-// class Channel extends React.Component {
-//     constructor(props) {
-//         super(props)
-//         this.pcPeers = {};
-//         this.userId = Math.floor(Math.random() * 10000);
-//         this.join = this.join.bind(this)
-//     }
+// class VideoCall extends React.Component{
     
-//     componentDidMount() {
-       
-//         this.props.getStreamId(this.props.match.params.id)
-          
-//     }
+//   constructor(props){
+//     super(props);
+//     this.pcPeers = {};
+//     this.userId = Math.floor(Math.random() * 10000);
 
-//     componentWillUnmount() {
-//         this.leaveCall();
-//     }
+//   }
+//   componentDidMount(){
+//     this.props.getStreamId(this.props.match.params.id)
+//     this.remoteVideoContainer = document.getElementById("remote-video-container")
+//     navigator.mediaDevices.getUserMedia( { audio: false, video: true })
+//     .then(stream => {
+//         this.localStream = stream;
+//         document.getElementById("local-video").srcObject = stream;
+//     }).catch(error => { console.log(error) });
+ 
+//   }
+//   joinCall(e){
+//     console.log(this.props.channel)
+//     App.cable.subscriptions.create(
+//         { channel: "StreamChannel",
+//             id: this.props.channel
+//      },
+//     { connected: () => {
+//         console.log('CONNECTED');
 
-//     joinCall(){
-   
-//         App.cable.subscriptions.create(
-//             { channel: "StreamChannel",
-//             stream_id: this.props.channel
-//         },
-//         { connected: () => {
-       
-//             broadcastData({ type: JOIN_CALL, from: this.userId, streamId: this.props.channel })
-//             debugger;
-//         },
-//             received: data => {
-//                 console.log("RECEIVED: ");
-    
-//                 if (data.from === this.userId) return;
-               
-//                 switch (data.type) {
-//                     case JOIN_CALL:
-//                         debugger
-//                         return this.join(data);
-//                     case EXCHANGE:
-//                         if (data.to !== this.userId) return;
-//                         return this.exchange(data);
-//                     case LEAVE_CALL:
-//                         return this.removeUser(data);
-//                     default:
-//                         return;
-//                 }
-//             }
-//         });  
-//       }
-      
-//       join(data){
-//         debugger
-//         this.createPC(data.from, true)
-        
-//       }
-//       removeUser(data){  
-//           let peers = this.pcPeers
-//           delete peers[data.from]
-//       }
-      
-//       createPC(userId, offerBool){
-//         debugger
-//         const pc = new RTCPeerConnection(ice);
-//         console.log("test")
-//         this.pcPeers[userId] = pc;
-//         if (offerBool) {
-//             pc.createOffer().then(offer => {
-//                 pc.setLocalDescription(offer).then(() => {
-//                     setTimeout( ()=>{
-//                         broadcastData({
-//                             type: EXCHANGE,
-//                             from: this.userId,
-//                             to: userId,
-//                             sdp: JSON.stringify(pc.localDescription),
-//                         })
-    
-//                     }, 0);
-//                 })
-//             })
-//         }
-//         pc.onicecandidate = (e) => {
-//             broadcastData({
-//                 type: EXCHANGE,
-//                 from: this.userId,
-//                 to: userId,
-//                 sdp: JSON.stringify(e.candidate)
-//             })
-//         };
-//         pc.ontrack = (e) => {
-//             this.videoPlayer = document.getElementById("video-player")
-//             debugger
-//             this.videoPlayer.autoPlay = "autoPlay"
-//             this.videoPlayer.srcObject = e.streams[0];
-//         };
-//         pc.oniceconnectionstatechange = (e) => {
-//             if (pc.iceConnectionState === 'disconnected') {
-//                 broadcastData({
-//                     type: LEAVE_CALL,
-//                     from: userId,
-//                 });
+//         broadcastData({ type: JOIN_CALL, from: this.userId, stream_Id: this.props.curUserId });
+//     },
+//         received: data => {
+
+//             console.log("RECEIVED: ", data);
+
+//             if (data.from === this.userId) return;
+
+//             switch (data.type) {
+//                 case JOIN_CALL:
+//                     return this.join(data);
+//                 case EXCHANGE:
+//                     if (data.to !== this.userId) return;
+//                     return this.exchange(data);
+//                 case LEAVE_CALL:
+//                     return this.removeUser(data);
+//                 default:
+//                     return;
 //             }
 //         }
-//         return pc;
-//       };
-//       leaveCall(e){
-//           const pcKeys = Object.keys(this.pcPeers);
-//           for (let i = 0; i < pcKeys.length; i++) {
-//               this.pcPeers[pcKeys[i]].close();
-//           }
-//           this.pcPeers = {};
-        
-//           App.cable.subscriptions.subscriptions = [];
+//     });  
+//   }
+  
+//   join(data){
+//     this.createPC(data.from, true)
+//   }
+//   removeUser(data){
+//       let video = document.getElementById(`remoteVideoContainer+${data.from}`);
+//       video && video.remove();
 
+//       let peers = this.pcPeers
+//       delete peers[data.from]
+//   }
+  
+//   createPC(userId, offerBool){
+//     const pc = new RTCPeerConnection(ice);
+
+//     this.pcPeers[userId] = pc;
+//     this.localStream.getTracks().forEach(track => pc.addTrack(track, this.localStream));
+//     if (offerBool) {
+//         pc.createOffer().then(offer => {
+//             pc.setLocalDescription(offer).then(() => {
+//                 setTimeout( ()=>{
+//                     broadcastData({
+//                         type: EXCHANGE,
+//                         from: this.userId,
+//                         to: userId,
+//                         sdp: JSON.stringify(pc.localDescription),
+//                     })
+
+//                 }, 0);
+//             })
+//         })
+//     }
+//     pc.onicecandidate = (e) => {
+//         broadcastData({
+//             type: EXCHANGE,
+//             from: this.userId,
+//             to: userId,
+//             sdp: JSON.stringify(e.candidate)
+//         })
+//     };
+//     pc.ontrack = (e) => {
+//         const remoteVid = document.createElement("video");
+//         remoteVid.id = `remoteVideoContainer+${userId}`;
+//         remoteVid.autoplay = "autoplay";
+//         remoteVid.srcObject = e.streams[0];
+//         this.remoteVideoContainer.appendChild(remoteVid);
+//     };
+//     pc.oniceconnectionstatechange = (e) => {
+//         if (pc.iceConnectionState === 'disconnected') {
 //             broadcastData({
 //                 type: LEAVE_CALL,
-//                 from: this.userId
+//                 from: userId,
 //             });
+//         }
+//     }
+//     return pc;
+//   };
+//   leaveCall(e){
+//       const pcKeys = Object.keys(this.pcPeers);
+//       for (let i = 0; i < pcKeys.length; i++) {
+//           this.pcPeers[pcKeys[i]].close();
 //       }
-        
-      
-//       exchange(data) {
-//           debugger
-//         let pc;
-//         if (this.pcPeers[data.from]) {
-//             pc = this.pcPeers[data.from];
-//         } else {
-//             pc = this.createPC(data.from, false);
-//         }
-//         if (data.candidate) {
-//             let candidate = JSON.parse(data.candidate)
-//             pc.addIceCandidate(new RTCIceCandidate(candidate))
-//         }
-//         if (data.sdp) {
-//             const sdp = JSON.parse(data.sdp);
-//             if (sdp && !sdp.candidate) {
-//                 pc.setRemoteDescription(sdp).then(() => {
-//                     if (sdp.type === 'offer') {
-//                         pc.createAnswer().then(answer => {
-//                             pc.setLocalDescription(answer)
-//                                 .then(() => {
+//       this.pcPeers = {};
+//       this.localVideo.srcObject.getTracks().forEach(function (track) {
+//           track.stop();
+//       })
+//       this.localVideo.srcObject = null;
+//       App.cable.subscriptions.subscriptions = [];
+//       this.remoteVideoContainer.innerHTML = "";
+//         broadcastData({
+//             type: LEAVE_CALL,
+//             from: this.userId
+//         });
+//   }
     
-//                                         broadcastData({
-//                                             type: EXCHANGE,
-//                                             from: this.userId,
-//                                             to: data.from,
-//                                             sdp: JSON.stringify(pc.localDescription)
-//                                         });
-    
-//                                 })
-//                         })
-//                     }
-//                 })
-//             }
-//         }
-//       }
-//         render(){
-//             return(<div className="VideoCall">
-//                         <video className="video-player" id="video-player" autoPlay></video>
-//                         <button onClick={this.joinCall.bind(this)}>Join Call</button>
-//                         <button onClick={this.leaveCall.bind(this)}>Leave Call</button>
-//                     </div>)
-//         }
+  
+//   exchange(data) {
+//     let pc;
+//     if (this.pcPeers[data.from]) {
+//         pc = this.pcPeers[data.from];
+//     } else {
+//         pc = this.createPC(data.from, false);
+//     }
+//     if (data.candidate) {
+//         let candidate = JSON.parse(data.candidate)
+//         pc.addIceCandidate(new RTCIceCandidate(candidate))
+//     }
+//     if (data.sdp) {
+//         const sdp = JSON.parse(data.sdp);
+//         if (sdp && !sdp.candidate) {
+//             pc.setRemoteDescription(sdp).then(() => {
+//                 if (sdp.type === 'offer') {
+//                     pc.createAnswer().then(answer => {
+//                         pc.setLocalDescription(answer)
+//                             .then(() => {
 
+//                                     broadcastData({
+//                                         type: EXCHANGE,
+//                                         from: this.userId,
+//                                         to: data.from,
+//                                         sdp: JSON.stringify(pc.localDescription)
+//                                     });
 
+//                             })
+//                     })
+//                 }
+//             })
+//         }
+//     }
+//   }
+//     render(){
+//         return(<div className="VideoCall">
+//                     <div id="remote-video-container"></div>
+//                     <video id="local-video" autoPlay></video>
+//                     <button onClick={this.joinCall.bind(this)}>Join Call</button>
+//                     <button onClick={this.leaveCall.bind(this)}>Leave Call</button>
+//                 </div>)
+//     }
 // }
-
-// export default Channel;
+// export default VideoCall;

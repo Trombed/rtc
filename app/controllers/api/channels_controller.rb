@@ -1,12 +1,12 @@
 class Api::ChannelsController < ApplicationController
     def create
         head :no_content
-        
-        ActionCable.server.broadcast("stream_channel#{params[:stream_id]}", call_params)
+        puts '-------------------'
+        puts params
+        puts '-------------------'
+        ActionCable.server.broadcast("stream_channel#{params[:stream_Id]}", call_params)
        
-        puts ActionCable.server.connections
-        puts ActionCable.server.connections.length;
-       
+
     end
 
     def show 

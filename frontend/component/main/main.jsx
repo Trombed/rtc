@@ -24,8 +24,7 @@ class Main extends React.Component {
                            streamId: `${channel.streamId}`
                         }
                    }}> 
-                   {/* <Link to={`${channel.streamId}`}> */}
-                       {channel.userName} is LIVE:  {channel.streamId}
+                       {channel.userName} is LIVE:  session: {channel.streamId}
                     </Link>
                 </div>
             )
