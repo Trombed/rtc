@@ -1,3 +1,7 @@
+.root {
+    height: 100;
+}
+
 .App {
     display: flex;
     flex-direction: column;
@@ -7,11 +11,12 @@
 
 .nav-bar {
     width: 100%;
-    padding-bottom: 20px;
     display: flex;
     justify-content: flex-end;
     flex-direction: row;
     align-content: center;
+    height: 5vh;
+    border-bottom: 1px solid white;
 }
 
 .nav-bar-container {
@@ -20,7 +25,7 @@
 }
 
 .nav-bar-login {
-    padding: 5px;
+    padding: 0px 10px;
     background-color: white;
     color: black;
     border-radius: 2px;
@@ -31,4 +36,16 @@
 }
 .nav-bar-divider {
     padding: 10px;
+}
+
+.body-divider {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+}
+
+.stream-list {
+    border-right: 1px solid white;
+    height: 94vh;
+ 
 }

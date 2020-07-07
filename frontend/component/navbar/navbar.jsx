@@ -35,11 +35,14 @@ class NavBar extends React.Component {
         } else {
             return (
                 <div className="nav-bar-container">
+                    <div>
+                    <Link to='/profile'> Broadcast</Link>
+
+                    </div>
                     <div className='nav-bar-login' onClick={() => this.props.logout()}>
                     LOGOUT
                     </div>
-                    
-                    <Link to='/profile'> Broadcast</Link>
+           
                 </div>
             )
         }
@@ -47,7 +50,7 @@ class NavBar extends React.Component {
 
     render() {
         return(
-            <div>
+            <div className="nav-bar">
                 {this.getUser()}
               
             </div>

@@ -8,7 +8,7 @@ class Broadcast extends React.Component{
     this.pcPeers = {};
     this.userId = this.props.curUserId;
     this.channelInfo = { user_id: this.props.curUserId }
-    this.state = { streamLive: true}
+    this.state = { streamLive: false }
   }
   componentDidMount(){
 
