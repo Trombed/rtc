@@ -16,6 +16,8 @@ class VideoCall extends React.Component{
 
   componentWillUnmount() {
     if(this.state.streamLive) this.props.streamOff(this.channelInfo)
+
+    App.cable.subscriptions.remove(this.subscribe);
   }
 
   getCamera() {
@@ -47,7 +49,7 @@ class VideoCall extends React.Component{
 
   joinCall(e){
     this.getCamera();
-    App.cable.subscriptions.create(
+    this.subscribe = App.cable.subscriptions.create(
         { channel: "StreamChannel",
             id: this.props.curUserId
      },
@@ -147,7 +149,7 @@ class VideoCall extends React.Component{
           track.stop();
       })
       video.srcObject = null;
-      App.cable.subscriptions.subscriptions = [];
+      App.cable.subscriptions.remove(this.subscribe);
       this.remoteVideoContainer.innerHTML = "";
         broadcastData({
             type: LEAVE_CALL,

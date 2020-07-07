@@ -10,10 +10,11 @@ class Api::StreamsController < ApplicationController
             @stream.user_id = params[:stream][:user_id]
             @stream.live = true
             if @stream.save 
-
-            render :show
+                render :index
+                broadcast 
+                
             else  
-            render json: @user.errors.full_messages, status: 422
+                render json: @user.errors.full_messages, status: 422
             end
         end
       end
@@ -22,16 +23,24 @@ class Api::StreamsController < ApplicationController
         @streams = Stream.all
 
         render :index
-
-    end
+    end 
     
+    def broadcast
+        @streams = Stream.all
+        @json = render_to_string('index.json')
+   
+     
+        ActionCable.server.broadcast("live_channel", JSON.parse(@json))
+     
+    end
+
     def destroy 
        
         @stream = Stream.find_by(user_id: params[:stream][:user_id])
         
         if @stream
             @stream.delete 
-            
+            broadcast
         else 
             render json: @stream.errors.full_messages, status: 422
         end 

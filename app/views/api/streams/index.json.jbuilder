@@ -1,7 +1,8 @@
 json.array! (@streams) do |stream| 
-    json.streamId stream.id
+    
+    json.id stream.id
     json.userName stream.user.username
-    json.userid stream.user_id    
+    json.user_id stream.user_id    
     
 end
 

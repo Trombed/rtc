@@ -41,7 +41,7 @@ class SessionForm extends React.Component {
         <form onSubmit={this.handleSubmit} className="login-form-box">
           Login:
        
-          <div onClick={this.props.closeModal} className="close-x">X</div>
+         
           {this.renderErrors()}
           <div className="login-form">
             <br/>
@@ -61,7 +61,7 @@ class SessionForm extends React.Component {
               />
             </label>
             <br/>
-            <input className="session-submit" type="submit" value={this.props.formType} />
+            <input className="session-submit" type="submit" value="Login" />
           </div>
         </form>
       </div>
