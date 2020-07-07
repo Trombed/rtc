@@ -1,6 +1,6 @@
 import {connect} from 'react-redux'
 import { streamOn, streamOff} from '../../actions/stream_actions'
-import Profile from './profile'
+import Broadcast from './broadcast'
 
 const mSTP = (state) => ({
     curUserName: Object.values(state.entities.users)[0].username,
@@ -16,4 +16,4 @@ const mDTP = dispatch => ({
 export default connect(
     mSTP, 
     mDTP
-)(Profile)
+)(Broadcast)

@@ -1,7 +1,7 @@
 import React from 'react';
 import { broadcastData, JOIN_CALL, LEAVE_CALL, EXCHANGE, ice } from '../../util/video_util.js';
 
-class VideoCall extends React.Component{
+class Broadcast extends React.Component{
     
   constructor(props){
     super(props);
@@ -208,6 +208,6 @@ class VideoCall extends React.Component{
                 </div>)
     }
 }
-export default VideoCall;
+export default Broadcast;
 
 

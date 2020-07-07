@@ -1,7 +1,7 @@
 import React from 'react';
 import { broadcastData, JOIN_CALL, LEAVE_CALL, EXCHANGE, ice } from '../../util/video_util.js';
 
-class VideoCall extends React.Component{
+class Channel extends React.Component{
     
   constructor(props){
     super(props);
@@ -110,10 +110,7 @@ class VideoCall extends React.Component{
           this.pcPeers[pcKeys[i]].close();
       }
       this.pcPeers = {};
-      this.localVideo.srcObject.getTracks().forEach(function (track) {
-          track.stop();
-      })
-      this.localVideo.srcObject = null;
+
       App.cable.subscriptions.subscriptions = [];
       this.remoteVideoContainer.innerHTML = "";
         broadcastData({
@@ -166,7 +163,7 @@ class VideoCall extends React.Component{
                 </div>)
     }
 }
-export default VideoCall;
+export default Channel;
 
 
 
