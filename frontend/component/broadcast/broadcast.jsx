@@ -1,6 +1,6 @@
 import React from 'react';
 import { broadcastData, JOIN_CALL, LEAVE_CALL, EXCHANGE, ice } from '../../util/video_util.js';
-
+import Chat from '../chat/chat'
 class Broadcast extends React.Component{
     
   constructor(props){
@@ -205,6 +205,8 @@ class Broadcast extends React.Component{
                         this.leaveCall.bind(this)
                         this.props.streamOff(this.channelInfo)
                         }}>Offline</button>
+
+                        <Chat />
                 </div>)
     }
 }
