@@ -67,7 +67,10 @@ class StreamList extends React.Component {
 
         return(
             <div className='stream-list'>
-                Online Channels:
+                <div className='stream-list-header'>
+                Live: 
+                </div>
+               
                 {this.channels}
             </div>
             
