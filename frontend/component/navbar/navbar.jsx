@@ -24,7 +24,7 @@ class NavBar extends React.Component {
                         Register
                         </div> 
                     </div>
-                    <div className="nav-bar-divider"></div>
+                    
                     <div>
                         <div className="nav-bar-login" onClick={ () => this.props.openModal('login') }>
                             Sign In
@@ -35,12 +35,12 @@ class NavBar extends React.Component {
         } else {
             return (
                 <div className="nav-bar-container">
-                    <div>
+                    <div className='nav-bar-login'>
                     <Link to='/profile'> Broadcast</Link>
 
                     </div>
                     <div className='nav-bar-login' onClick={() => this.props.logout()}>
-                    LOGOUT
+                    Logout
                     </div>
            
                 </div>

@@ -15,9 +15,10 @@ class Broadcast extends React.Component{
   }
 
   componentWillUnmount() {
-    if(this.state.streamLive) this.props.streamOff(this.channelInfo)
-
-    App.cable.subscriptions.remove(this.subscribe);
+    if(this.state.streamLive) { 
+        this.props.streamOff(this.channelInfo)  
+        App.cable.subscriptions.remove(this.subscribe)
+    }
   }
 
   getCamera() {
@@ -206,7 +207,7 @@ class Broadcast extends React.Component{
                         this.props.streamOff(this.channelInfo)
                         }}>Offline</button>
 
-                        <Chat />
+                        {/* <Chat id={this.props.curUserId} /> */}
                 </div>)
     }
 }
