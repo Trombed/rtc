@@ -8,12 +8,7 @@
     <%= stylesheet_link_tag    'application', media: 'all' %>
     <%= favicon_link_tag asset_path('/favicon.ico') %>
     <%= javascript_include_tag 'application' %>
-    <script type="text/javascript">
-      window.pubnubPublishKey = "<%= Rails.application.credentials.pubnub[:publishKey] %>"
-      window.pubnubSubscribeKey = "<%= Rails.application.credentials.pubnub[:subscribeKey] %>"
-      window.pubnubSecretKey = "<%= Rails.application.credentials.pubnub[:secretKey] %>"
-
-    </script>
+ 
   </head>
 
   <body>
