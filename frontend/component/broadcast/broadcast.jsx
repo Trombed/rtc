@@ -1,6 +1,8 @@
 import React from 'react';
 import { broadcastData, JOIN_CALL, LEAVE_CALL, EXCHANGE, ice } from '../../util/video_util.js';
 import Chat from '../chat/chat'
+import videojs from 'video.js'
+
 class Broadcast extends React.Component{
     
   constructor(props){
@@ -11,7 +13,9 @@ class Broadcast extends React.Component{
     this.state = { streamLive: false }
   }
   componentDidMount(){
-
+    this.player = videojs(this.videoNode, this.props, function onPlayerReady() {
+        console.log('onPlayerReady', this)
+      });
   }
 
   componentWillUnmount() {
@@ -19,6 +23,9 @@ class Broadcast extends React.Component{
         this.props.streamOff(this.channelInfo)  
         App.cable.subscriptions.remove(this.subscribe)
     }
+    if (this.player) {
+        this.player.dispose()
+      }
   }
 
   getCamera() {
@@ -121,12 +128,7 @@ class Broadcast extends React.Component{
     };
     pc.ontrack = (e) => {
 
-        const remoteVid = document.createElement("video");
-        remoteVid.id = `remoteVideoContainer+${userId}`;
-        remoteVid.autoplay = "autoplay";
-        remoteVid.srcObject = e.streams[0];
-    
-        this.remoteVideoContainer.appendChild(remoteVid);
+      
     };
     pc.oniceconnectionstatechange = (e) => {
         if (pc.iceConnectionState === 'disconnected') {
@@ -194,8 +196,14 @@ class Broadcast extends React.Component{
   }
     render(){
         return(<div className="VideoCall">
-                    <div id="remote-video-container"></div>
-                    <video id="local-video" controls autoPlay></video>
+                
+                    <video className="video-player" id="local-video" controls autoPlay
+                    height="500px"
+                    ></video>
+                    {/* <div data-vjs-player>
+                           <video ref={ node => this.videoNode = node } className="video-js video-player" id='local-video' autoPlay></video>
+                    </div> */}
+                    
                     <button onClick={ () => {
                             this.joinCall()
                             this.props.streamOn(this.channelInfo)
@@ -206,7 +214,8 @@ class Broadcast extends React.Component{
                         this.leaveCall.bind(this)
                         this.props.streamOff(this.channelInfo)
                         }}>Offline</button>
-
+                        
+   
                         {/* <Chat id={this.props.curUserId} /> */}
                 </div>)
     }

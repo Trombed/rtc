@@ -4,29 +4,61 @@
     bottom: 0%;
     right: 0%;
     left: 0%;
-
-
-
     z-index: 10;
     border-radius: 5px;
+    background: rgba(27, 27, 27, 0.6)
   }
   
   .modal-child {
+    width: 20%;
+    min-width: 20%;
+    height: 35vh;
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background: white;
+    background: rgb(59, 59, 59);
     opacity: 100%;
-    padding: 20px;
+    padding: 30px;
     border-radius: 5px;
+  
+  }
+  .modal-child:hover {
+    border: 1.5px solid fuchsia;
   }
 
+
   .login-form-container {
-   
-    color: black;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    color: white;
+  }
+
+  .login-divider {
+    padding: 1vh;
+    border-bottom: 1px solid black;
+  }
+
+  .login-input {
+    background-color: darkgrey;
+    border-radius: 5px;
+    border: none;
+
+  }
+
+  .login-input:active {
+    border: 2px solid fuchsia;
+  }
+
+  .login-errors {
+    color: red;
   }
 
   .session-submit {
+    width: 100%;
     padding: 5px;
+    cursor: pointer;
   }
+
+  
