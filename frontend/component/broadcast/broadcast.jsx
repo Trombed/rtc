@@ -1,7 +1,13 @@
 import React from 'react';
 import { broadcastData, JOIN_CALL, LEAVE_CALL, EXCHANGE, ice } from '../../util/video_util.js';
-import Chat from '../chat/chat'
-import videojs from 'video.js'
+import VideoPlayer from '../video_player/video_player'
+
+
+const videoJsOptions = {
+    autoplay: true,
+    controls: false,
+
+  }
 
 class Broadcast extends React.Component{
     
@@ -13,9 +19,7 @@ class Broadcast extends React.Component{
     this.state = { streamLive: false }
   }
   componentDidMount(){
-    this.player = videojs(this.videoNode, this.props, function onPlayerReady() {
-        console.log('onPlayerReady', this)
-      });
+
   }
 
   componentWillUnmount() {
@@ -23,9 +27,7 @@ class Broadcast extends React.Component{
         this.props.streamOff(this.channelInfo)  
         App.cable.subscriptions.remove(this.subscribe)
     }
-    if (this.player) {
-        this.player.dispose()
-      }
+ 
   }
 
   getCamera() {
@@ -47,10 +49,13 @@ class Broadcast extends React.Component{
             }
         }
     
-    navigator.mediaDevices.getUserMedia( { audio: true, video: true })
+    navigator.mediaDevices.getUserMedia( { audio: false, video: true })
     .then(stream => {
         this.localStream = stream;
-        document.getElementById("local-video").srcObject = stream;
+        
+        document.getElementById("local-video_html5_api").srcObject = stream;
+        debugger
+        
     }).catch(error => { console.log(error) });
   }
 
@@ -140,20 +145,22 @@ class Broadcast extends React.Component{
     }
     return pc;
   };
+
   leaveCall(e){
       const pcKeys = Object.keys(this.pcPeers);
       for (let i = 0; i < pcKeys.length; i++) {
           this.pcPeers[pcKeys[i]].close();
       }
       this.pcPeers = {};
-      let video = document.getElementById("local-video")
-    
-      video.srcObject.getTracks().forEach((track) => {
-          track.stop();
-      })
-      video.srcObject = null;
+      let video = document.getElementById("local-video_html5_api")
+        if (video.srcObject.getTracks()) {
+            video.srcObject.getTracks().forEach((track) => {
+                track.stop();
+            video.srcObject = null;
+
+            })
+        }
       App.cable.subscriptions.remove(this.subscribe);
-      this.remoteVideoContainer.innerHTML = "";
         broadcastData({
             type: LEAVE_CALL,
             from: this.userId
@@ -197,12 +204,13 @@ class Broadcast extends React.Component{
     render(){
         return(<div className="VideoCall">
                 
-                    <video className="video-player" id="local-video" controls autoPlay
+                    {/* <video className="video-player" id="local-video" controls autoPlay
                     height="500px"
-                    ></video>
-                    {/* <div data-vjs-player>
-                           <video ref={ node => this.videoNode = node } className="video-js video-player" id='local-video' autoPlay></video>
-                    </div> */}
+                    ></video> */}
+                    <VideoPlayer { ...videoJsOptions } />
+                    
+
+                   
                     
                     <button onClick={ () => {
                             this.joinCall()
@@ -211,12 +219,12 @@ class Broadcast extends React.Component{
                             LIVE</button>
                     
                     <button onClick={ () => {
-                        this.leaveCall.bind(this)
+                        this.leaveCall()
                         this.props.streamOff(this.channelInfo)
                         }}>Offline</button>
                         
    
-                        {/* <Chat id={this.props.curUserId} /> */}
+                      
                 </div>)
     }
 }

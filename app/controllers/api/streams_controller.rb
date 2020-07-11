@@ -42,7 +42,7 @@ class Api::StreamsController < ApplicationController
             @stream.delete 
             broadcast
         else 
-            render json: @stream.errors.full_messages, status: 422
+            render json: "stream already offline"
         end 
 
     end
