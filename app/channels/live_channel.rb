@@ -6,6 +6,5 @@ class LiveChannel < ApplicationCable::Channel
 
   def unsubscribed
     # Any cleanup needed when channel is unsubscribed
-
   end
 end

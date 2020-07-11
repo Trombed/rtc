@@ -29,7 +29,7 @@ class StreamList extends React.Component {
 
 
     componentWillUnmount() {
-        this.props.streams()
+       
         App.cable.subscriptions.remove(this.subscribe)
     }
 

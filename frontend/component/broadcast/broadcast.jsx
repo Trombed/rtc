@@ -1,12 +1,13 @@
-import React from 'react';
 import { broadcastData, JOIN_CALL, LEAVE_CALL, EXCHANGE, ice } from '../../util/video_util.js';
+import React from 'react';
 import VideoPlayer from '../video_player/video_player'
-
+import ChatContainer from '../chat/chat_container'
 
 const videoJsOptions = {
     autoplay: true,
     controls: false,
-
+    width: 720,
+    height: 300,
   }
 
 class Broadcast extends React.Component{
@@ -54,7 +55,7 @@ class Broadcast extends React.Component{
         this.localStream = stream;
         
         document.getElementById("local-video_html5_api").srcObject = stream;
-        debugger
+         this.setState({streamLive: true})
         
     }).catch(error => { console.log(error) });
   }
@@ -165,6 +166,7 @@ class Broadcast extends React.Component{
             type: LEAVE_CALL,
             from: this.userId
         });
+      this.setState({ streamLive: false})
   }
     
   
@@ -201,27 +203,43 @@ class Broadcast extends React.Component{
         }
     }
   }
-    render(){
-        return(<div className="VideoCall">
-                
-                    {/* <video className="video-player" id="local-video" controls autoPlay
-                    height="500px"
-                    ></video> */}
-                    <VideoPlayer { ...videoJsOptions } />
-                    
+  
+  toggleButton() {
+    if (!this.state.streamLive) {
+        return (
+        <button onClick={ () => {
+            this.joinCall()
+            this.props.streamOn(this.channelInfo)
+        }}>
+            LIVE</button>
+        )
+    } else {
+        return (
+            <button onClick={ () => {
+                this.leaveCall()
+                this.props.streamOff(this.channelInfo)
+                }}>Offline
+            </button>
+        )
+    }
+   
+  }
 
+
+    render(){
+        return(<div className="Broadcast-Page">
+                    <div>
+                    <VideoPlayer { ...videoJsOptions } />
+                    {this.toggleButton()}
+
+                    </div>
+                    <div>
+
+                        <ChatContainer />
+                    </div>
                    
                     
-                    <button onClick={ () => {
-                            this.joinCall()
-                            this.props.streamOn(this.channelInfo)
-                    }}>
-                            LIVE</button>
-                    
-                    <button onClick={ () => {
-                        this.leaveCall()
-                        this.props.streamOff(this.channelInfo)
-                        }}>Offline</button>
+                   
                         
    
                       

@@ -1,21 +1,19 @@
 import {connect} from 'react-redux'
-import {openModal} from '../../actions/modal_actions'
-import {logout } from '../../actions/session_action'
-import NavBar from './navbar'
+import Chat from './chat'
+import {sendMessage} from '../../util/chat_util'
 
 const mSTP = (state) => ({
-    session: state.session,
     userName: Object.values(state.entities.users)[0].username,
     userId: Object.values(state.entities.users)[0].id
     
 })
 
 const mDTP = dispatch => ({
-    openModal: modal => dispatch(openModal(modal)),
-    logout: () => dispatch(logout())
+    sendMessage: (message) => dispatch(sendMessage(message))
 })
+
 
 export default connect(
     mSTP, 
     mDTP
-)(NavBar)
+)(Chat)
