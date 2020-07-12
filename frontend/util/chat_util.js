@@ -2,9 +2,9 @@ export const sendMessage = (message) => {
     
     return (
         $.ajax({
-            method: "GET",
+            method: "POST",
             url: `/api/chats/`,
-            data: {channel},
+            data: {message},
         })
     )
 }

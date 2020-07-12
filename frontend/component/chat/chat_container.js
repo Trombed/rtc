@@ -9,7 +9,7 @@ const mSTP = (state) => ({
 })
 
 const mDTP = dispatch => ({
-    sendMessage: (message) => dispatch(sendMessage(message))
+    sendMessage: (message) => sendMessage(message)
 })
 
 

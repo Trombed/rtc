@@ -1,15 +1,18 @@
-.Chat-header {
-    background-color: red;
+.chat-container {
+    border-left: 1px solid grey;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
-.Chat-Send {
+.chat-send-button{
     background-color: red;
     color: white;
-    border-radius: 5px;
+
     font-size: 12px;
 }
 
-.Chat-Send:hover {
+.chat-send-button:hover {
     cursor: pointer;
     background-color: white;
     color: red;

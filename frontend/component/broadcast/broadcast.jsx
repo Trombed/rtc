@@ -5,7 +5,7 @@ import ChatContainer from '../chat/chat_container'
 
 const videoJsOptions = {
     autoplay: true,
-    controls: false,
+    controls: true,
     width: 720,
     height: 300,
   }
