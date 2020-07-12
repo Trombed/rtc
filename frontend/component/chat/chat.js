@@ -1,5 +1,5 @@
 import React from 'react'
-import {UserConsumer} from '../../usercontext/user-context'
+
 
 class Chat extends React.Component {
   
@@ -13,7 +13,7 @@ class Chat extends React.Component {
     }
     this.sendMessage = this.sendMessage.bind(this)
     this.messages = []
-    this.chatContainer = document.getElementById("Chat-Messages-Container")
+
   }
 
   componentDidMount() {
@@ -39,14 +39,25 @@ class Chat extends React.Component {
   }
 
   updateChat(data) {
+    let chatContainer = document.getElementById("Chat-Messages-Container")
+ 
+    var message = document.createElement("li")
+    message.classList.add("individual-messages")
+    message.innerHTML = `${data.userName}: ${data.message}`
+    chatContainer.appendChild(message)
+    if (chatContainer.childElementCount > 50) {
+      chatContainer.removeChild(chatContainer.childNodes[0])
+    }
 
   }
+
 
   updateMessage(e) {
     this.setState({message: e.target.value})
   }
 
   sendMessage() {
+    if (this.state.message.length <= 0) return;
     this.props.sendMessage(this.state);
   
     this.messages.push(this.state.message)
@@ -93,7 +104,9 @@ class Chat extends React.Component {
         Channel: {this.props.userName} {this.props.userId}
         </div>
         <div className="chat-messages-container" id="Chat-Messages-Container">
-          Welcome to the chat room...
+          <li>
+            Welcome to the chat room...
+          </li>
         </div>
         <div>
           <input type="text" 
