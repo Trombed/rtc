@@ -16,7 +16,7 @@ class StreamList extends React.Component {
         channel: "LiveChannel"
         },{
             connected: () => {  
-            console.log("live channel update connected")
+            // console.log("live channel update connected")
         },
             disconnected: () => { },
             received: data => { 
@@ -33,14 +33,12 @@ class StreamList extends React.Component {
         App.cable.subscriptions.remove(this.subscribe)
     }
 
-    componentWillReceiveProps(prevProps) {
-        if (this.props.channels !== prevProps.channels) {
-           
-            this.setState({ channels: prevProps.channels})
-        }
+    componentDidUpdate(prevProps) {
 
-     
-    }
+        if (this.props.channels !== prevProps.channels) {
+            this.updateChannels(this.props.channels)
+        }
+    }   
 
     updateChannels(data) {
         this.setState({ channels: data})
@@ -50,14 +48,11 @@ class StreamList extends React.Component {
     render() {
         
         this.channels = this.state.channels.map( (channel, index) => {
-         
+
             return (
                 <div key={index}>
                    <Link to={{
-                       pathname: `${channel.userName}`,
-                       state: {
-                           streamId: `${channel.streamId}`
-                        }
+                       pathname: `${channel.userName}`
                    }}> 
                        {channel.userName} is LIVE:  session: {channel.id}
                     </Link>

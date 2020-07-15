@@ -3,7 +3,7 @@ import { getStream} from "../../actions/channel_action"
 import Channel from './channel'
 
 const mSTP = (state) => ({
-    channel: state.watch
+    channels: state.watch
 })
 
 const mDTP = dispatch => ({

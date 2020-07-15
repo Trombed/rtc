@@ -9,6 +9,8 @@ import ChannelContainer from './channel/channel_container';
 import Main from './main/main'
 
 
+
+
 const App = () => (
     <div className="App">
         <Modal />

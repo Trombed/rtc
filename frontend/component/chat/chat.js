@@ -9,33 +9,38 @@ class Chat extends React.Component {
       message: "",
       userId: (this.props.userId || -1),
       userName: this.props.userName,
-      chatId: this.props.userId
+      chatId: this.props.chatChannel
     }
     this.sendMessage = this.sendMessage.bind(this)
     this.messages = []
-
+    
   }
 
   componentDidMount() {
-    this.chatSubscribe = App.cable.subscriptions.create({
+
+    App.chatSubscribe = App.cable.subscriptions.create({
       channel: "ChatChannel",
-      chatId: this.props.userId,
+      chatId: this.props.chatChannel,
       user_id: this.props.userId,
       user_name: this.props.userName
       },{
           connected: () => {  
-          console.log("chat channel update connected")
-      },
-          disconnected: () => { },
+        
+      },  
+          disconnected: () => { 
+            App.cable.subscriptions.remove(this.chatSubscribe)
+          },
           received: data => { 
-              console.log(data)
+   
               this.updateChat(data)
           }
       })
+      
+   
   }
 
   componentWillUnmount() {
-    App.cable.subscriptions.remove(this.chatSubscribe)
+    // App.cable.subscriptions.remove(this.chatSubscribe)
   }
 
   updateChat(data) {
@@ -43,11 +48,24 @@ class Chat extends React.Component {
  
     var message = document.createElement("li")
     message.classList.add("individual-messages")
-    message.innerHTML = `${data.userName}: ${data.message}`
+
+    var user = document.createElement("span")
+    user.classList.add("chat-user-name")
+    user.innerHTML = `${data.userName}: `
+    
+    var sentence = document.createElement("span")
+    sentence.classList.add("chat-user-message")
+    sentence.innerHTML = `&nbsp${data.message}`
+
+    message.appendChild(user)
+    message.appendChild(sentence)
+
     chatContainer.appendChild(message)
-    if (chatContainer.childElementCount > 50) {
+    if (chatContainer.childElementCount > 100) {
       chatContainer.removeChild(chatContainer.childNodes[0])
     }
+
+    chatContainer.scrollTop = chatContainer.scrollHeight
 
   }
 
@@ -57,7 +75,7 @@ class Chat extends React.Component {
   }
 
   sendMessage() {
-    if (this.state.message.length <= 0) return;
+    // if (this.state.message.length <= 0) return;
     this.props.sendMessage(this.state);
   
     this.messages.push(this.state.message)
@@ -93,23 +111,24 @@ class Chat extends React.Component {
     this.index = this.messages.length;
   }
 
-  
-
 
 
   render() {
     return (
       <div className="chat-container">
-        <div>
-        Channel: {this.props.userName} {this.props.userId}
+        <div className="chat-top">
+          <div className="chat-header">
+            Channel: {this.props.chatChannel}
+          </div>
+          <div className="chat-messages-container"   id="Chat-Messages-Container">
+            <li>
+              Welcome to the chat room...
+            </li>
+          </div>
         </div>
-        <div className="chat-messages-container" id="Chat-Messages-Container">
-          <li>
-            Welcome to the chat room...
-          </li>
-        </div>
-        <div>
+        <div className="chat-bottom">
           <input type="text" 
+                  className="chat-input"
                   value={this.state.message}
                   placeholder="Type your messages..."
                   onKeyDown={ e => this.keyCheck(e)}

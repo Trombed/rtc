@@ -68,13 +68,13 @@ class Broadcast extends React.Component{
             id: this.props.curUserId
      },
     { connected: () => {
-        console.log('CONNECTED');
+        // console.log('CONNECTED');
 
         broadcastData({ type: JOIN_CALL, from: this.userId, stream_Id: this.props.curUserId });
     },
         received: data => {
 
-            console.log("RECEIVED: ", data);
+            // console.log("RECEIVED: ", data);
 
             if (data.from === this.userId) return;
 
@@ -235,7 +235,7 @@ class Broadcast extends React.Component{
                     </div>
                     <div>
 
-                        <ChatContainer />
+                        <ChatContainer chatChannel={this.props.curUserName}/>
                     </div>
                    
                     

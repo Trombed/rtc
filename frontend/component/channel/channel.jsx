@@ -1,5 +1,6 @@
 import React from 'react';
 import { broadcastData, JOIN_CALL, LEAVE_CALL, EXCHANGE, ice } from '../../util/video_util.js';
+import ChatContainer from '../chat/chat_container';
 
 class Channel extends React.Component{
     
@@ -7,7 +8,7 @@ class Channel extends React.Component{
     super(props);
     this.pcPeers = {};
     this.userId = Math.floor(Math.random() * 10000);
-
+    
   }
   componentDidMount(){
     this.props.getStreamId(this.props.match.params.id)
@@ -24,13 +25,11 @@ class Channel extends React.Component{
             id: this.props.channel
      },
     { connected: () => {
-        console.log('CONNECTED');
+        // console.log('CONNECTED');
 
         broadcastData({ type: JOIN_CALL, from: this.userId, stream_Id: this.props.curUserId });
     },
         received: data => {
-
-            console.log("RECEIVED: ", data);
 
             if (data.from === this.userId) return;
 
@@ -154,12 +153,13 @@ class Channel extends React.Component{
     }
   }
     render(){
-        return(<div className="VideoCall">
+        
+        return(<div className="Broadcast-Page">
                     <div id="remote-video-container">
                         Watching
                         <video id="remote-video" autoPlay controls></video>
                     </div>
-                   
+                   <ChatContainer chatChannel={this.props.match.params.id} />
                 </div>)
     }
 }

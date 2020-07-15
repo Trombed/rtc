@@ -11,7 +11,7 @@ export const ice = { iceServers: [
 
 
 export const broadcastData = (data)  => {
-    console.log(data)
+
    fetch("/api/channels", {
                     method: "POST",
                     body: JSON.stringify(data),

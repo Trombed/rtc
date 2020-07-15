@@ -4,6 +4,8 @@ class ChatChannel < ApplicationCable::Channel
         puts "chat_channel_#{params[:chatId]}"
     end
 
+    
+
     def unsubscribed
 
     end
