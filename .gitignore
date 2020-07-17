@@ -7,3 +7,4 @@ config/master.key
 /storage
 /log
 /public/assets
+/images

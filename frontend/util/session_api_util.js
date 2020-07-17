@@ -22,6 +22,18 @@ const APIUtil = {
       })
     ),
 
+    update: (formData) => {
+
+      return (
+      $.ajax({
+        method: "POST",
+        url: `/api/profile_pics/`,
+        data: formData,
+        contentType: false,
+        processData: false
+      }))
+    },
+
     demoLogin: () => {
 
       return $.ajax({

@@ -44,3 +44,9 @@ export const logout = () => (dispatch) => (
 export const clearError = () => dispatch => dispatch(receiveErrors([]))
 
 
+export const updateProfile = (user) => (dispatch) => (
+    APIUtil.update(user)
+    .then((user) => dispatch(receiveCurrentUser(user))).fail((response) => (dispatch(receiveErrors(response.responseJSON))))
+)
+
+

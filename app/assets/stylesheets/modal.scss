@@ -61,4 +61,50 @@
     cursor: pointer;
   }
 
+
+
+  .profile-background {
+    position: fixed;
+    top: 0;
+    bottom: 0%;
+    right: 0%;
+    left: 0%;
+    z-index: 10;
+    border-radius: 5px;
+    background: rgba(27, 27, 27, 0.6)
+  }
   
+  .profile-child {
+    width: 20%;
+    min-width: 20%;
+    height: 35vh;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgb(59, 59, 59);
+    opacity: 100%;
+    padding: 30px;
+    border-radius: 5px;
+  
+  }
+  .profile-child:hover {
+    border: 1.5px solid fuchsia;
+  }
+
+  .edit-profile-pic {
+    width: 100%;
+  }
+
+  input[type="file"] {
+    display: none;
+  }
+  
+  .profile-file-upload {
+    background-color: white;
+    color: black;
+  }
+
+  .profile-file-upload:hover {
+    cursor: pointer;
+  }
