@@ -38,6 +38,12 @@
 }
 
 .nav-bar-dropdown {
+    position: absolute;
+    width: 20vw;
+    border-radius: 5px;
+
+    background-color: black;
+    cursor: pointer;
     display: none;
     flex-direction: column;
 }
@@ -46,7 +52,7 @@
     width: 50px;
 }
 
-.nav-bar-drop:hover .nav-bar-dropdown {
-    position: absolute;
-    display: flex;
+
+.nav-bar-drop {
+    cursor: pointer;
 }

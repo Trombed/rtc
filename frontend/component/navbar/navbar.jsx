@@ -5,6 +5,14 @@ import { Link } from 'react-router-dom';
 class NavBar extends React.Component {
     constructor(props) {
         super(props)
+        this.state = {
+            dropdown: false 
+        }
+    }
+
+    openOptions() {
+        let dropdown = document.getElementsByClassName("nav-bar-dropdown")
+        dropdown.style("display")
     }
 
 
@@ -28,27 +36,24 @@ class NavBar extends React.Component {
         } else {
             return (
                 <div className="nav-bar-container">
-                    <div className="nav-bar-profile-image"
-                      
-                    >
-                        
-                   
-                    </div>
                     <div className='nav-bar-login'>
-                    <Link to='/profile'> Broadcast</Link>
-
+                        <Link to='/profile'> Broadcast</Link>
                     </div>
-                    <div className='nav-bar-drop'>
+                    <div className='nav-bar-drop' onClick={() => this.openOptions()}>
                         <img src={this.props.user[this.props.session.id].imageURL}
                         className="profile-pic"
                         alt="Change Profile Pic"/>
                         <div className="nav-bar-dropdown">
+                            <div>
+
+                            </div>
                             <div className="nav-bar-drop-button"
-                            onClick={() => this.props.logout()} >
+                                 onClick={() => this.props.logout()} 
+                            >
                                 Log Out
                             </div>
-                            <div   onClick={
-                            () => this.props.openModal('profile')
+                            <div className="nav-bar-drop-button"
+                                 onClick={ () => this.props.openModal('profile')
                             }>
                                 Change Profile Pic
                             </div>
